@@ -1,0 +1,323 @@
+<?xml version="1.0" ?>
+
+<robot name="neobot">
+
+  <link name="base_footprint">
+  </link>
+
+  <joint name="base_footprint_joint"
+    type="fixed">
+    <origin
+      xyz="0 0 0.0345"
+      rpy="0 0 0" />
+    <parent
+      link="base_footprint" />
+    <child
+      link="base_link" />
+  </joint>
+
+  <link name="base_link">
+    <inertial>
+      <origin
+        xyz="0.019736266638338499 -0.00103592208239938 0.024943774276299499"
+        rpy="0 0 0" />
+      <mass
+        value="2.886" />
+      <inertia
+        ixx="0.0230886"
+        ixy="0.00059632880"
+        ixz="0.00089059654"
+        iyy="0.040993868"
+        iyz="-0.00001729413"
+        izz="0.056762850" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://neobot/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://neobot/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+
+  <link name="left_wheel_link">
+    <inertial>
+      <origin
+        xyz="0 0.015369 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.132" />
+      <inertia
+        ixx="0.000103824895"
+        ixy="0"
+        ixz="0"
+        iyy="0.000183869513"
+        iyz="0"
+        izz="0.000103824895" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://neobot/meshes/left_wheel_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.69804 0.69804 0.69804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://neobot/meshes/left_wheel_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="left_wheel_joint"
+    type="continuous">
+    <origin
+      xyz="0 0.136 0.0155"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="left_wheel_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      effort="1"
+      velocity="1" />
+  </joint>
+
+
+  <link name="right_wheel_link">
+    <inertial>
+      <origin
+        xyz="0 -0.015369 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.132" />
+      <inertia
+        ixx="0.000103824895"
+        ixy="0"
+        ixz="0"
+        iyy="0.000183869513"
+        iyz="0"
+        izz="0.000103824895" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://neobot/meshes/right_wheel_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.69804 0.69804 0.69804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://neobot/meshes/right_wheel_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="right_wheel_joint"
+    type="continuous">
+    <origin
+      xyz="0 -0.136 0.0155"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="right_wheel_link" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      effort="1"
+      velocity="1" />
+  </joint>
+
+
+  <link name="front_castor_link">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.0138" />
+      <inertia
+        ixx="0.000000312122139"
+        ixy="0"
+        ixz="0"
+        iyy="0.000000312122139"
+        iyz="0"
+        izz="0.000000312122139" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://neobot/meshes/front_castor_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.64706 0.61961 0.58824 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://neobot/meshes/front_castor_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="front_castor_joint"
+    type="fixed">
+    <origin
+      xyz="0.12 0 -0.0265"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="front_castor_link" />
+  </joint>
+
+
+  <link name="rear_castor_link">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.0138" />
+      <inertia
+        ixx="0.000000312122139"
+        ixy="0"
+        ixz="0"
+        iyy="0.000000312122139"
+        iyz="0"
+        izz="0.000000312122139" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://neobot/meshes/rear_castor_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.64706 0.61961 0.58824 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://neobot/meshes/rear_castor_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="rear_castor_joint"
+    type="fixed">
+    <origin
+      xyz="-0.12 0 -0.0265"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="rear_castor_link" />
+  </joint>
+
+
+  <link name="camera_link" />
+
+  <joint name="camera_joint"
+    type="fixed">
+    <origin
+      xyz="0.19905 0 0.072"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="camera_link" />
+    
+  </joint>
+
+
+  <link name="imu_link" />
+
+  <joint name="imu_joint"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="imu_link" />
+    
+  </joint>
+
+
+  <link name="lidar_link" />
+
+  <joint name="lidar_joint"
+    type="fixed">
+    <origin
+      xyz="0.18 0 0.0376"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="lidar_link" />
+    
+  </joint>
+
+
+</robot>
