@@ -166,7 +166,7 @@
 
 
             <sensor name="depth_camera" type="rgbd_camera">
-                <update_rate>10</update_rate>
+                <update_rate>30</update_rate>
                 <topic>depth_camera</topic>
                 <gz_frame_id>camera_link</gz_frame_id>
                 <camera name="depth_camera">
