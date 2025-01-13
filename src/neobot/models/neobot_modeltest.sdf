@@ -10,7 +10,6 @@
         </plugin>
 
 
-
         <plugin filename="gz-sim-sensors-system"
                 name="gz::sim::systems::Sensors">
             <render_engine>ogre2</render_engine>
@@ -21,21 +20,16 @@
             <left_joint>left_wheel_joint</left_joint>
             <right_joint>right_wheel_joint</right_joint>
             <!-- wheel_separation: Distance b/w outer surfaces of the wheel -->
-            <wheel_separation>0.272</wheel_separation>  
+            <wheel_separation>0.352</wheel_separation>  
             <wheel_radius>0.05</wheel_radius>
             <odom_publish_frequency>30</odom_publish_frequency>
             <min_linear_velocity>-0.314</min_linear_velocity>
             <max_linear_velocity>0.314</max_linear_velocity>
             <min_angular_velocity>-0.4</min_angular_velocity>
             <max_angular_velocity>0.4</max_angular_velocity>
-
-            <max_linear_acceleration>1.5</max_linear_acceleration>
-            <min_linear_acceleration>-1.5</min_linear_acceleration>
-            <max_angular_acceleration>1.5</max_angular_acceleration>
-            <min_angular_acceleration>-1.5</min_angular_acceleration>
             <topic>/cmd_vel</topic>
             <odom_topic>odom_encoders</odom_topic>
-            <tf_topic>tf_enc</tf_topic>
+            <tf_topic>tf</tf_topic>
             <frame_id>odom</frame_id>
             <child_frame_id>base_footprint</child_frame_id>
         </plugin>
@@ -60,8 +54,8 @@
             <odom_frame>odom</odom_frame>
             <robot_base_frame>base_footprint</robot_base_frame>
             <odom_topic>odom</odom_topic>
-            <tf_topic>tf</tf_topic>
-            <!-- <dimensions>2</dimensions> -->
+            <tf_topic>tf_true</tf_topic>
+            <dimensions>2</dimensions>
             <frame_id>odom</frame_id>
             <child_frame_id>base_footprint</child_frame_id>
             <odom_publish_frequency>10</odom_publish_frequency>
@@ -79,18 +73,6 @@
     <!-- ********************* LINKS ********************* -->
 
         <link name="base_footprint">
-            <inertial>
-                <pose>0 0 0 0 0 0</pose>
-                <mass>0</mass>
-                <inertia>
-                <ixx>0</ixx>
-                <ixy>0</ixy>
-                <ixz>0</ixz>
-                <iyy>0</iyy>
-                <iyz>0</iyz>
-                <izz>0</izz>
-                </inertia>
-            </inertial>
         </link>
 
         <link name='base_link'>
@@ -151,28 +133,56 @@
 
         <link name='camera_link'>
             <pose relative_to='camera_joint'>0 0 0 0 0 0</pose>
-            <inertial>
-                <pose>0 0 0 0 0 0</pose>
-                <mass>0</mass>
-                <inertia>
-                <ixx>0</ixx>
-                <ixy>0</ixy>
-                <ixz>0</ixz>
-                <iyy>0</iyy>
-                <iyz>0</iyz>
-                <izz>0</izz>
-                </inertia>
-            </inertial>
 
-
-            <sensor name="depth_camera" type="rgbd_camera">
-                <update_rate>10</update_rate>
-                <topic>depth_camera</topic>
+            <!-- <sensor name="camera_link" type="depth_camera">
+                <update_rate>30.0</update_rate>
                 <gz_frame_id>camera_link</gz_frame_id>
-                <camera name="depth_camera">
+                <topic>camera_link</topic>
+                <camera>
+                    <camera_info_topic>camera_link/camera_info</camera_info_topic>
+                    <horizontal_fov>1.20428</horizontal_fov>
+                    <image>
+                        <width>640</width>
+                        <height>480</height>
+                        <format>R8G8B8</format>
+                    </image>
+                    <clip>
+                        <near>0.05</near>
+                        <far>4.0</far>
+                    </clip>
+                </camera>
+            </sensor> -->
+
+
+
+
+            <sensor name="camera_link" type="rgbd_camera">
+                <update_rate>30</update_rate>
+                <topic>camera_link</topic>
+                <gz_frame_id>camera_link</gz_frame_id>
+                <camera name="camera_link">
                 
                 <horizontal_fov>1.0472</horizontal_fov>
-
+                <lens>
+                    <intrinsics>
+                    <!-- fx = fy = width / ( 2 * tan (hfov / 2 ) ) -->
+                    <fx>554.25469</fx>
+                    <fy>554.25469</fy>
+                    <!-- cx = ( width + 1 ) / 2 -->
+                    <cx>320.5</cx>
+                    <!-- cy = ( height + 1 ) / 2 -->
+                    <cy>240.5</cy>
+                    <s>0</s>
+                    </intrinsics>
+                </lens>
+                <distortion>
+                    <k1>0.0</k1>
+                    <k2>0.0</k2>
+                    <k3>0.0</k3>
+                    <p1>0.0</p1>
+                    <p2>0.0</p2>
+                    <center>0.5 0.5</center>
+                </distortion>
                 <image>
                     <width>640</width>
                     <height>480</height>
@@ -180,7 +190,7 @@
                 </image>
                 <clip>
                     <near>0.01</near>
-                    <far>100</far>
+                    <far>300</far>
                 </clip>
                 <depth_camera>
                     <clip>
@@ -204,18 +214,6 @@
 
         <link name='imu_link'>
             <pose relative_to='imu_joint'>0 0 0 0 0 0</pose>
-            <inertial>
-                <pose>0 0 0 0 0 0</pose>
-                <mass>0</mass>
-                <inertia>
-                <ixx>0</ixx>
-                <ixy>0</ixy>
-                <ixz>0</ixz>
-                <iyy>0</iyy>
-                <iyz>0</iyz>
-                <izz>0</izz>
-                </inertia>
-            </inertial>
             
             <sensor name="imu_sensor" type="imu">
                 <gz_frame_id>imu</gz_frame_id>
@@ -229,18 +227,6 @@
 
         <link name='lidar_link'>
             <pose relative_to='lidar_joint'>0 0 0 0 0 0</pose>
-            <inertial>
-                <pose>0 0 0 0 0 0</pose>
-                <mass>0</mass>
-                <inertia>
-                <ixx>0</ixx>
-                <ixy>0</ixy>
-                <ixz>0</ixz>
-                <iyy>0</iyy>
-                <iyz>0</iyz>
-                <izz>0</izz>
-                </inertia>
-            </inertial>
             
             <sensor name='gpu_lidar' type='gpu_lidar'>
 
@@ -370,8 +356,8 @@
             </visual>
         </link>
 
-        <link name='front_castor_link'>
-            <pose relative_to='front_castor_joint'/>
+        <link name='front_left_castor_link'>
+            <pose relative_to='front_left_castor_joint'/>
             <inertial>
                 <pose>0 0 0 0 0 0</pose>
                 <mass>0.0138</mass>
@@ -384,7 +370,7 @@
                 <izz>0.000000312122139</izz>
                 </inertia>
             </inertial>
-            <collision name='front_castor_link_collision'>
+            <collision name='front_left_castor_link_collision'>
                 <pose>0 0 0 0 0 0</pose>
                 <geometry>
                 <sphere>
@@ -400,7 +386,7 @@
                     </friction>
                 </surface>
             </collision>
-            <visual name='front_castor_link_visual'>
+            <visual name='front_left_castor_link_visual'>
                 <pose>0 0 0 0 0 0</pose>
                 <geometry>
                 <mesh>
@@ -415,8 +401,8 @@
             </visual>
         </link>
 
-        <link name='rear_castor_link'>
-            <pose relative_to='rear_castor_joint'/>
+        <link name='front_right_castor_link'>
+            <pose relative_to='front_right_castor_joint'/>
             <inertial>
                 <pose>0 0 0 0 0 0</pose>
                 <mass>0.0138</mass>
@@ -429,7 +415,7 @@
                 <izz>0.000000312122139</izz>
                 </inertia>
             </inertial>
-            <collision name='rear_castor_link_collision'>
+            <collision name='front_right_castor_link_collision'>
                 <pose>0 0 0 0 0 0</pose>
                 <geometry>
                 <sphere>
@@ -445,7 +431,97 @@
                     </friction>
                 </surface>
             </collision>
-            <visual name='rear_castor_link_visual'>
+            <visual name='front_right_castor_link_visual'>
+                <pose>0 0 0 0 0 0</pose>
+                <geometry>
+                <mesh>
+                    <scale>1 1 1</scale>
+                    <uri>../meshes/front_castor_link.STL</uri>
+                </mesh>
+                </geometry>
+                <material>
+                <diffuse>0.808824956 0.774512529 0.735300064 1</diffuse>
+                <ambient>0.808824956 0.774512529 0.735300064 1</ambient>
+                </material>
+            </visual>
+        </link>
+
+        <link name='rear_left_castor_link'>
+            <pose relative_to='rear_left_castor_joint'/>
+            <inertial>
+                <pose>0 0 0 0 0 0</pose>
+                <mass>0.0138</mass>
+                <inertia>
+                <ixx>0.000000312122139</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>0.000000312122139</iyy>
+                <iyz>0</iyz>
+                <izz>0.000000312122139</izz>
+                </inertia>
+            </inertial>
+            <collision name='rear_left_castor_link_collision'>
+                <pose>0 0 0 0 0 0</pose>
+                <geometry>
+                <sphere>
+                    <radius>0.0075</radius>
+                </sphere>
+                </geometry>
+                <surface>
+                    <friction>
+                    <ode>
+                        <mu>0.00</mu>
+                        <mu2>0.00</mu2>
+                    </ode>
+                    </friction>
+                </surface>
+            </collision>
+            <visual name='rear_left_castor_link_visual'>
+                <pose>0 0 0 0 0 0</pose>
+                <geometry>
+                <mesh>
+                    <scale>1 1 1</scale>
+                    <uri>../meshes/rear_castor_link.STL</uri>
+                </mesh>
+                </geometry>
+                <material>
+                <diffuse>0.808824956 0.774512529 0.735300064 1</diffuse>
+                <ambient>0.808824956 0.774512529 0.735300064 1</ambient>
+                </material>
+            </visual>
+        </link>
+
+        <link name='rear_right_castor_link'>
+            <pose relative_to='rear_right_castor_joint'/>
+            <inertial>
+                <pose>0 0 0 0 0 0</pose>
+                <mass>0.0138</mass>
+                <inertia>
+                <ixx>0.000000312122139</ixx>
+                <ixy>0</ixy>
+                <ixz>0</ixz>
+                <iyy>0.000000312122139</iyy>
+                <iyz>0</iyz>
+                <izz>0.000000312122139</izz>
+                </inertia>
+            </inertial>
+            <collision name='rear_right_castor_link_collision'>
+                <pose>0 0 0 0 0 0</pose>
+                <geometry>
+                <sphere>
+                    <radius>0.0075</radius>
+                </sphere>
+                </geometry>
+                <surface>
+                    <friction>
+                    <ode>
+                        <mu>0.00</mu>
+                        <mu2>0.00</mu2>
+                    </ode>
+                    </friction>
+                </surface>
+            </collision>
+            <visual name='rear_right_castor_link_visual'>
                 <pose>0 0 0 0 0 0</pose>
                 <geometry>
                 <mesh>
@@ -503,6 +579,7 @@
                     </axis>
         </joint>
         
+
         <joint name='right_wheel_joint' type='revolute'>
             <pose relative_to='base_link'>0 -0.136 0.0155 0 0 0</pose>
                 <parent>base_link</parent>
@@ -518,16 +595,30 @@
                     </axis>
         </joint>
         
-        <joint name='front_castor_joint' type='ball'>
-            <pose relative_to='base_link'>0.12 0 -0.0265 0 0 0</pose>
+
+
+        <joint name='front_left_castor_joint' type='fixed'>
+            <pose relative_to='base_link'>0.12 0.08 -0.0255 0 0 0</pose>
                 <parent>base_link</parent>
-                <child>front_castor_link</child>
+                <child>front_left_castor_link</child>
+        </joint>
+
+        <joint name='front_right_castor_joint' type='fixed'>
+            <pose relative_to='base_link'>0.12 -0.08 -0.0255 0 0 0</pose>
+                <parent>base_link</parent>
+                <child>front_right_castor_link</child>
         </joint>
         
-        <joint name='rear_castor_joint' type='ball'>
-            <pose relative_to='base_link'>-0.12 0 -0.0265 0 0 0</pose>
+        <joint name='rear_left_castor_joint' type='fixed'>
+            <pose relative_to='base_link'>-0.12 0.08 -0.0255 0 0 0</pose>
                 <parent>base_link</parent>
-                <child>rear_castor_link</child>
+                <child>rear_left_castor_link</child>
+        </joint>
+
+        <joint name='rear_right_castor_joint' type='fixed'>
+            <pose relative_to='base_link'>-0.12 -0.08 -0.0255 0 0 0</pose>
+                <parent>base_link</parent>
+                <child>rear_right_castor_link</child>
         </joint>
         
     </model>

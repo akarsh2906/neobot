@@ -17,6 +17,7 @@ def generate_launch_description():
     orientation_yaw = '0.0'
     default_urdf_path = join(pkg_share, 'urdf/neobot_description.urdf')
     default_model_path = join(pkg_share, 'models/neobot_model.sdf')
+    ros_gz_bridge_config_path = join(pkg_share, 'config/ros_gz_bridge.yaml')
     robot_name_in_urdf = 'neobot'
     
 
@@ -43,6 +44,12 @@ def generate_launch_description():
         name='use_sim_time',
         default_value='True',
         description='Use simulation (Gazebo) clock if true')
+    
+
+    declare_ros_gz_bridge = DeclareLaunchArgument(
+        name='bridge_config',
+        default_value=ros_gz_bridge_config_path,
+        description='Bridge config file')
     
 
 
@@ -72,31 +79,46 @@ def generate_launch_description():
             "-Y", orientation_yaw
         ]
     )
+
+    wheel_speed_pub = Node(
+        package="neobot_control",
+        executable="wheel_speed_pub"
+    )
     
 
-    # Start ROS_GZ Bridge
+    # # Start ROS_GZ Bridge
+    # start_gz_bridge = Node(
+    #     package='ros_gz_bridge',
+    #     executable='parameter_bridge',
+    #     arguments=[
+    #         "/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist",
+    #         "/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock",
+    #         "/odom_encoders@nav_msgs/msg/Odometry[gz.msgs.Odometry",
+    #         "/odom@nav_msgs/msg/Odometry[gz.msgs.Odometry",
+    #         "/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V",
+    #         # "/tf_truth@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V",
+    #         "/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan",
+    #         "/camera_link/image@sensor_msgs/msg/Image[gz.msgs.Image",
+    #         "/camera_link/depth_image@sensor_msgs/msg/Image[gz.msgs.Image",
+    #         "/camera_link/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo",
+    #         "/camera_link/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked",
+    #         "/imu@sensor_msgs/msg/Imu[gz.msgs.IMU",
+    #         "/joint_states@sensor_msgs/msg/JointState[gz.msgs.Model",
+    #         "/left_wheel_speed@std_msgs/msg/Float64@gz.msgs.Double",
+    #         "/right_wheel_speed@std_msgs/msg/Float64@gz.msgs.Double"
+            
+    #     ],
+    #     remappings=[
+    #         # ('/camera_info', '/camera_link/camera_info')
+    #     ]
+    # )
+
     start_gz_bridge = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
-        arguments=[
-            "/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist",
-            "/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock",
-            "/odom_encoders@nav_msgs/msg/Odometry[gz.msgs.Odometry",
-            "/odom_world@nav_msgs/msg/Odometry[gz.msgs.Odometry",
-            "/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V",
-            # "/tf_truth@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V",
-            "/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan",
-            "/camera_link/image@sensor_msgs/msg/Image[gz.msgs.Image",
-            "/camera_link/depth_image@sensor_msgs/msg/Image[gz.msgs.Image",
-            "/camera_link/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo",
-            "/camera_link/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked",
-            "/imu@sensor_msgs/msg/Imu[gz.msgs.IMU",
-            "/joint_states@sensor_msgs/msg/JointState[gz.msgs.Model"
-        ],
-        remappings=[
-            # ('/camera_info', '/camera_link/camera_info')
-        ]
+        parameters=[{"config_file": ros_gz_bridge_config_path}]
     )
+
 
 
 
@@ -109,11 +131,13 @@ def generate_launch_description():
     ld.add_action(declare_urdf_path_cmd)
     ld.add_action(declare_use_robot_state_pub_cmd)  
     ld.add_action(declare_use_sim_time_cmd)
+    ld.add_action(declare_ros_gz_bridge)
 
 
     # Add any actions
     ld.add_action(start_robot_state_publisher_cmd)
     ld.add_action(gz_spawn_entity)
+    ld.add_action(wheel_speed_pub)
     ld.add_action(start_gz_bridge)
 
 

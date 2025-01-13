@@ -1,0 +1,120 @@
+# Full set of configurations
+- topic_name: "cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  subscriber_queue: 5
+  publisher_queue: 6
+  lazy: true
+  direction: "BIDIRECTIONAL"
+
+- topic_name: "scan"
+  ros_type_name: "sensor_msgs/msg/LaserScan"
+  gz_type_name: "gz.msgs.LaserScan"
+  subscriber_queue: 5
+  publisher_queue: 6
+  lazy: true
+  direction: "GZ_TO_ROS"
+
+- topic_name: "imu"
+  ros_type_name: "sensor_msgs/msg/Imu"
+  gz_type_name: "gz.msgs.IMU"
+  subscriber_queue: 5
+  publisher_queue: 6
+  lazy: true
+  direction: "GZ_TO_ROS"
+
+- topic_name: "depth_camera/image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  subscriber_queue: 5
+  publisher_queue: 6
+  lazy: true
+  direction: "GZ_TO_ROS"
+
+- topic_name: "depth_camera/depth_image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  subscriber_queue: 5
+  publisher_queue: 6
+  lazy: true
+  direction: "GZ_TO_ROS"
+
+- topic_name: "depth_camera/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  subscriber_queue: 5
+  publisher_queue: 6
+  lazy: true
+  direction: "GZ_TO_ROS"
+
+- topic_name: "depth_camera/points"
+  ros_type_name: "sensor_msgs/msg/PointCloud2"
+  gz_type_name: "gz.msgs.PointCloudPacked"
+  subscriber_queue: 5
+  publisher_queue: 6
+  lazy: true
+  direction: "GZ_TO_ROS"
+
+- topic_name: "clock"
+  ros_type_name: "rosgraph_msgs/msg/Clock"
+  gz_type_name: "gz.msgs.Clock"
+  subscriber_queue: 5
+  publisher_queue: 6
+  lazy: true
+  direction: "GZ_TO_ROS"
+
+# - topic_name: "odom_encoders"
+#   ros_type_name: "nav_msgs/msg/Odometry"
+#   gz_type_name: "gz.msgs.Odometry"
+#   subscriber_queue: 5
+#   publisher_queue: 6
+#   lazy: true
+#   direction: "GZ_TO_ROS"
+
+- topic_name: "odom"
+  ros_type_name: "nav_msgs/msg/Odometry"
+  gz_type_name: "gz.msgs.Odometry"
+  subscriber_queue: 5
+  publisher_queue: 6
+  lazy: true
+  direction: "GZ_TO_ROS"
+
+- topic_name: "tf"
+  ros_type_name: "tf2_msgs/msg/TFMessage"
+  gz_type_name: "gz.msgs.Pose_V"
+  subscriber_queue: 5
+  publisher_queue: 6
+  lazy: true
+  direction: "GZ_TO_ROS"
+
+# - topic_name: "tf_truth"
+#   ros_type_name: "tf2_msgs/msg/TFMessage"
+#   gz_type_name: "gz.msgs.Pose_V"
+#   subscriber_queue: 5
+#   publisher_queue: 6
+#   lazy: true
+#   direction: "GZ_TO_ROS"
+
+- topic_name: "joint_states"
+  ros_type_name: "sensor_msgs/msg/JointState"
+  gz_type_name: "gz.msgs.Model"
+  subscriber_queue: 5
+  publisher_queue: 6
+  lazy: true
+  direction: "GZ_TO_ROS"
+
+- topic_name: "left_wheel_speed"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  subscriber_queue: 5
+  publisher_queue: 6
+  lazy: true
+  direction: "ROS_TO_GZ"
+
+- topic_name: "right_wheel_speed"
+  ros_type_name: "std_msgs/msg/Float64"
+  gz_type_name: "gz.msgs.Double"
+  subscriber_queue: 5
+  publisher_queue: 6
+  lazy: true
+  direction: "ROS_TO_GZ"
