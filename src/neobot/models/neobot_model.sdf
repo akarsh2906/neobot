@@ -316,8 +316,10 @@
                 </mesh>
                 </geometry>
                 <material>
-                <diffuse>0.872550011 0.872550011 0.872550011 1</diffuse>
-                <ambient>0.872550011 0.872550011 0.872550011 1</ambient>
+                    <script>
+                        <name>Gazebo/Yellow</name>
+                        <uri>file://media/materials/scripts/gazebo.material</uri>
+                    </script>
                 </material>
             </visual>
         </link>
@@ -363,9 +365,11 @@
                     <uri>../meshes/right_wheel_link.STL</uri>
                 </mesh>
                 </geometry>
-                <material>
-                <diffuse>0.872550011 0.872550011 0.872550011 1</diffuse>
-                <ambient>0.872550011 0.872550011 0.872550011 1</ambient>
+                <material name="yellow">
+                    <script>
+                        <name>Gazebo/Yellow</name>
+                        <uri>file://media/materials/scripts/gazebo.material</uri>
+                    </script>
                 </material>
             </visual>
         </link>

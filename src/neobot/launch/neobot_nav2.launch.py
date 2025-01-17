@@ -53,20 +53,14 @@ def generate_launch_description():
         parameters=[{'yaml_filename': join(neobot_path, 'maps', 'neobot_map.yaml')}],
     )
 
-    static_transform_publisher_node = Node(
-        package='tf2_ros',
-        executable='static_transform_publisher',
-        name='map_to_odom',
-        output='screen',
-        arguments=['0', '0', '0', '0', '0', '0', 'map', 'odom']
-    )
-
-    # remapper_node = Node(
-    #     package='bcr_bot',
-    #     executable='remapper.py',
-    #     name='remapper',
+    # static_transform_publisher_node = Node(
+    #     package='tf2_ros',
+    #     executable='static_transform_publisher',
+    #     name='map_to_odom',
     #     output='screen',
+    #     arguments=['0', '0', '0', '0', '0', '0', 'map', 'odom']
     # )
+
 
     ld = LaunchDescription()
 
@@ -74,8 +68,8 @@ def generate_launch_description():
     ld.add_action(rviz_launch_cmd)
     ld.add_action(amcl_node)
     ld.add_action(map_server_node)
-    ld.add_action(static_transform_publisher_node)
-    # ld.add_action(remapper_node)
+    # ld.add_action(static_transform_publisher_node)
+
 
     return ld
 
