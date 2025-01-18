@@ -8,7 +8,7 @@ from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
-    pkg_nav2_dir = FindPackageShare(package='nav2_bringup').find('nav2_bringup')
+    pkg_nav2_dir = FindPackageShare(package='neobot_nav2_bringup').find('neobot_nav2_bringup')
     neobot_path = FindPackageShare(package='neobot').find('neobot')
 
     use_sim_time = LaunchConfiguration('use_sim_time', default='True')
@@ -19,7 +19,7 @@ def generate_launch_description():
 
     nav2_launch_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            join(pkg_nav2_dir, 'launch', 'bringup_launch.py')
+            join(pkg_nav2_dir, 'launch', 'bringup.launch.py')
         ),
         launch_arguments={
             'use_sim_time': use_sim_time,
@@ -36,14 +36,6 @@ def generate_launch_description():
         name="rviz2",
         arguments=[['-d', rviz_config_file]]
     )
-    
-    amcl_node = Node(
-        package='nav2_amcl',
-        executable='amcl',
-        name='amcl',
-        output='screen',
-        parameters=[join(neobot_path, 'config', 'nav2_params.yaml')],
-    )
 
     map_server_node = Node(
         package='nav2_map_server',
@@ -53,22 +45,21 @@ def generate_launch_description():
         parameters=[{'yaml_filename': join(neobot_path, 'maps', 'neobot_map.yaml')}],
     )
 
-    # static_transform_publisher_node = Node(
-    #     package='tf2_ros',
-    #     executable='static_transform_publisher',
-    #     name='map_to_odom',
-    #     output='screen',
-    #     arguments=['0', '0', '0', '0', '0', '0', 'map', 'odom']
-    # )
+    static_transform_publisher_node = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='map_to_odom',
+        output='screen',
+        arguments=['0', '0', '0', '0', '0', '0', 'map', 'odom']
+    )
 
 
     ld = LaunchDescription()
 
     ld.add_action(nav2_launch_cmd)
     ld.add_action(rviz_launch_cmd)
-    ld.add_action(amcl_node)
     ld.add_action(map_server_node)
-    # ld.add_action(static_transform_publisher_node)
+    ld.add_action(static_transform_publisher_node)
 
 
     return ld
