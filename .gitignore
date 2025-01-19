@@ -2,3 +2,5 @@ build
 install
 log
 src/.vscode
+src/vector_pursuit_controller
+src/navigation2_tutorials/
