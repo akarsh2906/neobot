@@ -91,6 +91,12 @@ nav_msgs::msg::Path AStarPlanner::createPlan(
   cost_so_far[start_y * costmap_->getSizeInCellsX() + start_x] = 0;
 
   while (!open_list.empty()) {
+    // Check for cancellation request
+    if (cancel_checker()) {
+      RCLCPP_INFO(node_->get_logger(), "Path planning cancelled");
+      return global_path;
+    }
+
     auto current = open_list.top();
     open_list.pop();
 
@@ -114,11 +120,21 @@ nav_msgs::msg::Path AStarPlanner::createPlan(
 
     // Explore neighbors
     for (auto &[nx, ny] : getNeighbors(current.x, current.y)) {
-      if (costmap_->getCost(nx, ny) >= nav2_costmap_2d::INSCRIBED_INFLATED_OBSTACLE) continue;
+      // Check if the current neighbor is in an inflated obstacle area or blocked
+      if (costmap_->getCost(nx, ny) >= nav2_costmap_2d::LETHAL_OBSTACLE) {
+        // Skip if the cell is completely occupied by an obstacle
+        continue;
+      }
+      else if (costmap_->getCost(nx, ny) >= nav2_costmap_2d::INSCRIBED_INFLATED_OBSTACLE) {
+        // Skip if the cell is within the inflated obstacle zone
+        continue;
+      }
 
+      // Calculate the new cost to reach the neighbor
       float new_cost = cost_so_far[current.y * costmap_->getSizeInCellsX() + current.x] + 1.0;  // Constant cost
       int neighbor_index = ny * costmap_->getSizeInCellsX() + nx;
 
+      // If we have not visited this neighbor or found a cheaper way, update
       if (cost_so_far.find(neighbor_index) == cost_so_far.end() || new_cost < cost_so_far[neighbor_index]) {
         cost_so_far[neighbor_index] = new_cost;
         float priority = new_cost + getHeuristic(nx, ny, goal_x, goal_y);
