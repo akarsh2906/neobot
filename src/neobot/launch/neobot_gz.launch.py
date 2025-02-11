@@ -55,7 +55,7 @@ def generate_launch_description():
     start_gz_sim = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(join(gz_sim_share, "launch", "gz_sim.launch.py")),
         launch_arguments={
-            "gz_args" : PythonExpression(["'", world_file, " -r'"])
+            "gz_args" : PythonExpression(["'", world_file, " -r -v4'"])
 
         }.items()
     )

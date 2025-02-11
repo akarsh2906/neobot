@@ -1,6 +1,30 @@
 <?xml version="1.0" ?>
 
 <robot name="neobot">
+  
+  <ros2_control name="GazeboSimSystem" type="system">
+      <hardware>
+          <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+      </hardware>
+      <joint name="left_wheel_joint">
+          <command_interface name="velocity">
+            <param name="min">-1</param>
+            <param name="max">1</param>
+          </command_interface>
+          <state_interface name="position"/>
+          <state_interface name="velocity"/>
+      </joint>
+
+      <joint name="right_wheel_joint">
+          <command_interface name="velocity">
+            <param name="min">-1</param>
+            <param name="max">1</param>
+          </command_interface>
+          <state_interface name="position"/>
+          <state_interface name="velocity"/>
+      </joint>
+  </ros2_control>
+
 
   <link name="base_footprint">
   </link>
@@ -37,7 +61,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://neobot/meshes/base_link.STL" />
+          filename="/home/akarsh/neobot_ws/src/neobot/meshes/base_link.STL" />
       </geometry>
       <material
         name="">
@@ -51,7 +75,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://neobot/meshes/base_link.STL" />
+          filename="/home/akarsh/neobot_ws/src/neobot/meshes/base_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -78,7 +102,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://neobot/meshes/left_wheel_link.STL" />
+          filename="/home/akarsh/neobot_ws/src/neobot/meshes/left_wheel_link.STL" />
       </geometry>
       <material
         name="">
@@ -92,7 +116,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://neobot/meshes/left_wheel_link.STL" />
+          filename="/home/akarsh/neobot_ws/src/neobot/meshes/left_wheel_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -135,7 +159,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://neobot/meshes/right_wheel_link.STL" />
+          filename="/home/akarsh/neobot_ws/src/neobot/meshes/right_wheel_link.STL" />
       </geometry>
       <material
         name="">
@@ -149,7 +173,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://neobot/meshes/right_wheel_link.STL" />
+          filename="/home/akarsh/neobot_ws/src/neobot/meshes/right_wheel_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -192,7 +216,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://neobot/meshes/front_castor_link.STL" />
+          filename="/home/akarsh/neobot_ws/src/neobot/meshes/front_castor_link.STL" />
       </geometry>
       <material
         name="">
@@ -206,7 +230,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://neobot/meshes/front_castor_link.STL" />
+          filename="/home/akarsh/neobot_ws/src/neobot/meshes/front_castor_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -244,7 +268,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://neobot/meshes/rear_castor_link.STL" />
+          filename="/home/akarsh/neobot_ws/src/neobot/meshes/rear_castor_link.STL" />
       </geometry>
       <material
         name="">
@@ -258,7 +282,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://neobot/meshes/rear_castor_link.STL" />
+          filename="/home/akarsh/neobot_ws/src/neobot/meshes/rear_castor_link.STL" />
       </geometry>
     </collision>
   </link>

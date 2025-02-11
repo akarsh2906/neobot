@@ -241,6 +241,121 @@
                 </visual>
             </link>
         </model>
+
+
+
+        <actor name="supervisor_walking">
+            <skin>
+                <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+                <scale>0.0</scale>
+            </skin>
+            <animation name="walk">
+                <filename>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</filename>
+                <interpolate_x>true</interpolate_x>
+            </animation>
+
+            <script>
+                <loop>true</loop>
+                <delay_start>0.000000</delay_start>
+                <auto_start>true</auto_start>
+                <trajectory id="0" type="walk" tension="0.6">
+                    <waypoint>
+                        <time>0</time>
+                        <pose>-3.78 8.74 1.0 0 0 -1.57</pose>
+                    </waypoint>
+                    <waypoint>
+                        <time>20</time>
+                        <pose>-3.78 -8.78 1.0 0 0 -1.57</pose>
+                    </waypoint>
+                    <waypoint>
+                        <time>20.5</time>
+                        <pose>-3.78 -8.78 1.0 0 0 -0.915</pose>
+                    </waypoint>
+                    <waypoint>
+                        <time>21.5</time>
+                        <pose>-3.26 -9.46 1.0 0 0 -0.915</pose>
+                    </waypoint>
+                    <waypoint>
+                        <time>22</time>
+                        <pose>-3.26 -9.46 1.0 0 0 0</pose>
+                    </waypoint>
+                    <waypoint>
+                        <time>27</time>
+                        <pose>0.87 -9.46 1.0 0 0 0</pose>
+                    </waypoint>
+                    <waypoint>
+                        <time>27.5</time>
+                        <pose>0.87 -9.46 1.0 0 0 0.915</pose>
+                    </waypoint>
+                    <waypoint>
+                        <time>28.5</time>
+                        <pose>1.79 -8.87 1.0 0 0 0.915</pose>
+                    </waypoint>
+                    <waypoint>
+                        <time>29</time>
+                        <pose>1.79 -8.87 1.0 0 0 1.57</pose>
+                    </waypoint>
+                    <waypoint>
+                        <time>49</time>
+                        <pose>1.79 7.74 1.0 0 0 1.57</pose>
+                    </waypoint>
+
+
+                    <waypoint>
+                        <time>50</time>
+                        <pose>1.79 7.74 1.0 0 0 -1.57</pose>
+                    </waypoint>
+                    <waypoint>
+                        <time>80</time>
+                        <pose>1.79 -8.87 1.0 0 0 -1.57</pose>
+                    </waypoint>
+                    <waypoint>
+                        <time>80.5</time>
+                        <pose>1.79 -8.87 1.0 0 0 -2.485</pose>
+                    </waypoint>
+                    <waypoint>
+                        <time>81.5</time>
+                        <pose>0.87 -9.46 1.0 0 0 -2.485</pose>
+                    </waypoint>
+                    <waypoint>
+                        <time>82</time>
+                        <pose>0.87 -9.46 1.0 0 0 -3.14</pose>
+                    </waypoint>
+                    <waypoint>
+                        <time>87</time>
+                        <pose>-3.26 -9.46 1.0 0 0 -3.14</pose>
+                    </waypoint>
+                    <waypoint>
+                        <time>87.5</time>
+                        <pose>-3.26 -9.46 1.0 0 0 2.485</pose>
+                    </waypoint>
+                    <waypoint>
+                        <time>88.5</time>
+                        <pose>-3.78 -8.78 1.0 0 0 2.485</pose>
+                    </waypoint>
+                    <waypoint>
+                        <time>89</time>
+                        <pose>-3.78 -8.78 1.0 0 0 1.57</pose>
+                    </waypoint>
+                    <waypoint>
+                        <time>109</time>
+                        <pose>-3.78 8.74 1.0 0 0 1.57</pose>
+                    </waypoint>
+                    <waypoint>
+                        <time>110</time>
+                        <pose>-3.78 8.74 1.0 0 0 -1.57</pose>
+                    </waypoint>
+                    
+                    
+                    
+                </trajectory>
+            </script>
+
+            
+        </actor>
+
+
+
     <gui fullscreen='0'>
       <camera name='user_camera'>
         <pose>-3.90827 -4.65526 4.77216 0 0.623643 0.728194</pose>

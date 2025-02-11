@@ -12,7 +12,7 @@ from launch_ros.substitutions import FindPackageShare
 def generate_launch_description():
 
     pkg_share = FindPackageShare(package='neobot').find('neobot')
-    position_x = '0.0'
+    position_x = '-2.0'
     position_y = '0.0'
     orientation_yaw = '0.0'
     default_urdf_path = join(pkg_share, 'urdf/neobot_description.urdf')
@@ -86,40 +86,11 @@ def generate_launch_description():
     )
     
 
-    # # Start ROS_GZ Bridge
-    # start_gz_bridge = Node(
-    #     package='ros_gz_bridge',
-    #     executable='parameter_bridge',
-    #     arguments=[
-    #         "/cmd_vel@geometry_msgs/msg/Twist@gz.msgs.Twist",
-    #         "/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock",
-    #         "/odom_encoders@nav_msgs/msg/Odometry[gz.msgs.Odometry",
-    #         "/odom@nav_msgs/msg/Odometry[gz.msgs.Odometry",
-    #         "/tf@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V",
-    #         # "/tf_truth@tf2_msgs/msg/TFMessage[gz.msgs.Pose_V",
-    #         "/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan",
-    #         "/camera_link/image@sensor_msgs/msg/Image[gz.msgs.Image",
-    #         "/camera_link/depth_image@sensor_msgs/msg/Image[gz.msgs.Image",
-    #         "/camera_link/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo",
-    #         "/camera_link/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked",
-    #         "/imu@sensor_msgs/msg/Imu[gz.msgs.IMU",
-    #         "/joint_states@sensor_msgs/msg/JointState[gz.msgs.Model",
-    #         "/left_wheel_speed@std_msgs/msg/Float64@gz.msgs.Double",
-    #         "/right_wheel_speed@std_msgs/msg/Float64@gz.msgs.Double"
-            
-    #     ],
-    #     remappings=[
-    #         # ('/camera_info', '/camera_link/camera_info')
-    #     ]
-    # )
-
     start_gz_bridge = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
         parameters=[{"config_file": ros_gz_bridge_config_path}]
     )
-
-
 
 
     
@@ -137,7 +108,7 @@ def generate_launch_description():
     # Add any actions
     ld.add_action(start_robot_state_publisher_cmd)
     ld.add_action(gz_spawn_entity)
-    ld.add_action(wheel_speed_pub)
+    # ld.add_action(wheel_speed_pub)
     ld.add_action(start_gz_bridge)
 
 
