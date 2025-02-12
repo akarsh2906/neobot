@@ -89,7 +89,7 @@ def generate_launch_description():
     )
 
     declare_use_localization_cmd = DeclareLaunchArgument(
-        'use_localization', default_value='True',
+        'use_localization', default_value='False',
         description='Whether to enable localization or not'
     )
 

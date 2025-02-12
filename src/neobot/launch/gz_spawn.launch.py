@@ -3,8 +3,8 @@
 from os.path import join
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.conditions import IfCondition
-from launch.substitutions import Command, LaunchConfiguration
+from launch.conditions import IfCondition, UnlessCondition
+from launch.substitutions import Command, LaunchConfiguration, PythonExpression
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
@@ -12,19 +12,26 @@ from launch_ros.substitutions import FindPackageShare
 def generate_launch_description():
 
     pkg_share = FindPackageShare(package='neobot').find('neobot')
-    position_x = '-2.0'
+    position_x = '0.0'
     position_y = '0.0'
     orientation_yaw = '0.0'
-    default_urdf_path = join(pkg_share, 'urdf/neobot_description.urdf')
-    default_model_path = join(pkg_share, 'models/neobot_model.sdf')
+    default_urdf_path = join(pkg_share, 'urdf/neobot.xacro')
     ros_gz_bridge_config_path = join(pkg_share, 'config/ros_gz_bridge.yaml')
+    ros_gz_bridge_no_ros2_control_config_path = join(pkg_share, 'config/ros_gz_bridge_no_ros2_control.yaml')
+    twist_mux_params = join(pkg_share,'config','twist_mux.yaml')
     robot_name_in_urdf = 'neobot'
     
 
     # Launch configuration variables specific to simulation
-    model = LaunchConfiguration('model')
-    use_robot_state_pub = LaunchConfiguration('use_robot_state_pub')
     use_sim_time = LaunchConfiguration('use_sim_time')
+
+    use_lidar = LaunchConfiguration("use_lidar", default=True)
+    use_imu = LaunchConfiguration("use_imu", default=True)
+    use_camera = LaunchConfiguration("use_camera", default=True)
+    use_ros2_control = LaunchConfiguration("use_ros2_control", default=True)
+    publish_ground_truth = LaunchConfiguration("publish_ground_truth", default=True)
+    odometry_source = LaunchConfiguration("odometry_source", default='world') # 'world' or 'encoder'
+    
 
 
     # Declare the launch arguments  
@@ -33,11 +40,6 @@ def generate_launch_description():
         default_value=default_urdf_path, 
         description='Absolute path to robot urdf file')
         
-    
-    declare_use_robot_state_pub_cmd = DeclareLaunchArgument(
-        name='use_robot_state_pub',
-        default_value='True',
-        description='Whether to start the robot state publisher')
 
         
     declare_use_sim_time_cmd = DeclareLaunchArgument(
@@ -45,24 +47,29 @@ def generate_launch_description():
         default_value='True',
         description='Use simulation (Gazebo) clock if true')
     
-
-    declare_ros_gz_bridge = DeclareLaunchArgument(
-        name='bridge_config',
-        default_value=ros_gz_bridge_config_path,
-        description='Bridge config file')
     
 
 
     # Specify the actions
 
-    # Subscribe to the joint states of the robot, and publish the 3D pose of each link.
+    
     start_robot_state_publisher_cmd = Node(
-        condition=IfCondition(use_robot_state_pub),
-        package='robot_state_publisher',
-        executable='robot_state_publisher',
-        parameters=[{'use_sim_time': use_sim_time, 
-        'robot_description': Command(['xacro ', model])}],
-        arguments=[default_urdf_path])
+        package="robot_state_publisher",
+        executable="robot_state_publisher",
+        name="robot_state_publisher",
+        parameters=[
+                    {'use_sim_time': use_sim_time,
+                        'robot_description': Command( \
+                    ['xacro ', join(default_urdf_path),
+                    ' use_imu:=', use_imu,
+                    ' use_camera:=', use_camera,
+                    ' use_lidar:=', use_lidar,
+                    ' publish_ground_truth:=', publish_ground_truth,
+                    ' use_ros2_control:=', use_ros2_control,
+                    ' odometry_source:=', odometry_source 
+                    ])
+                    }]
+    )
 
 
     # Spawn neobot in open GZ world
@@ -70,46 +77,92 @@ def generate_launch_description():
         package="ros_gz_sim",
         executable="create",
         arguments=[
-            "-file", default_model_path,
+            "-topic", "/robot_description",
             "-name", "neobot",
             "-allow_renaming", "true",
-            "-z", "0.2",
+            "-z", "0.2",    
             "-x", position_x,
             "-y", position_y,
             "-Y", orientation_yaw
         ]
     )
 
-    wheel_speed_pub = Node(
-        package="neobot_control",
-        executable="wheel_speed_pub"
-    )
-    
+
 
     start_gz_bridge = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
-        parameters=[{"config_file": ros_gz_bridge_config_path}]
+        parameters=[{"config_file": ros_gz_bridge_config_path}],
+        condition=IfCondition(use_ros2_control)
+    )
+    start_gz_bridge_no_ros2_control = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        parameters=[{"config_file": ros_gz_bridge_no_ros2_control_config_path}],
+        condition=UnlessCondition(use_ros2_control)
     )
 
+    start_gz_image_bridge = Node(
+        package="ros_gz_image",
+        executable="image_bridge",
+        arguments=["depth_camera/image", "depth_camera/depth_image"]
+    )
 
     
+    start_diff_drive_controller = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["diff_controller"],
+        condition=IfCondition(use_ros2_control)
+    )
+
+    start_joint_state_broadcaster = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["joint_state_broadcaster"],
+        condition=IfCondition(use_ros2_control)
+    )
+
+    
+    twist_mux = Node(
+            package="twist_mux",
+            executable="twist_mux",
+            parameters=[twist_mux_params, {'use_sim_time': use_sim_time}],
+            remappings=[('/cmd_vel_out','/diff_controller/cmd_vel_unstamped')]
+        )
+
+    twist_stamper = Node(
+            package='twist_stamper',
+            executable='twist_stamper',
+            name='twist_stamper',
+            output='screen',
+            remappings=[
+                ('/cmd_vel_in', '/diff_controller/cmd_vel_unstamped'),
+                ('/cmd_vel_out', '/diff_controller/cmd_vel')
+            ]
+        )
+
+
+
     # Create the launch description and populate
     ld = LaunchDescription()
 
 
     # Declare the launch options
     ld.add_action(declare_urdf_path_cmd)
-    ld.add_action(declare_use_robot_state_pub_cmd)  
     ld.add_action(declare_use_sim_time_cmd)
-    ld.add_action(declare_ros_gz_bridge)
 
 
     # Add any actions
     ld.add_action(start_robot_state_publisher_cmd)
     ld.add_action(gz_spawn_entity)
-    # ld.add_action(wheel_speed_pub)
     ld.add_action(start_gz_bridge)
+    ld.add_action(start_gz_bridge_no_ros2_control)
+    ld.add_action(start_gz_image_bridge)
+    ld.add_action(start_diff_drive_controller)
+    ld.add_action(start_joint_state_broadcaster)
+    ld.add_action(twist_mux)
+    ld.add_action(twist_stamper)
 
 
     return ld

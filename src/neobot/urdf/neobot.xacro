@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="neobot">
+
+    <!--................................ XACRO CONSTANTS .............................. -->
+
+
+    
+
+    <xacro:property name="eps" value="0.002"/>
+
+
+    <xacro:arg name="use_ros2_control"     default="false" />
+    <xacro:arg name="publish_ground_truth" default="false" />
+    <xacro:arg name="use_lidar"            default="false" />
+    <xacro:arg name="use_camera"           default="false" />
+    <xacro:arg name="use_imu"              default="true" />
+    
+    <xacro:property name="odometry_source" value="$(arg odometry_source)"/>
+
+
+
+
+    <!-- ............................... LOAD MACROS ................................. -->
+
+    <xacro:include filename="$(find neobot)/urdf/neobot_structure.xacro"/>
+    <xacro:include filename="$(find neobot)/urdf/gz_plugins.xacro"/>
+    <xacro:if value="$(arg use_ros2_control)">
+        <xacro:include filename="$(find neobot)/urdf/ros2_control.xacro"/>
+    </xacro:if>
+
+    
+</robot>

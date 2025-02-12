@@ -22,7 +22,7 @@ def generate_launch_description():
     use_rviz = LaunchConfiguration("use_rviz")
 
     default_use_rviz = "False"
-    default_world_file_path =  join(neobot_path, "worlds", "small_warehouse.sdf")
+    default_world_file_path =  join(neobot_path, "worlds", "empty.sdf")
     default_rviz_config_path = join(neobot_path, 'rviz/rviz_config.rviz')
     
     
@@ -55,7 +55,7 @@ def generate_launch_description():
     start_gz_sim = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(join(gz_sim_share, "launch", "gz_sim.launch.py")),
         launch_arguments={
-            "gz_args" : PythonExpression(["'", world_file, " -r -v4'"])
+            "gz_args" : PythonExpression(["'", world_file, " -r'"])
 
         }.items()
     )

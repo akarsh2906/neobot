@@ -24,7 +24,7 @@ def generate_launch_description():
         launch_arguments={
             'use_sim_time': use_sim_time,
             'autostart': autostart,
-            'map': join(neobot_path, 'maps', 'neobot_map.yaml'),
+            # 'map': join(neobot_path, 'maps', 'neobot_map.yaml'),
             'params_file': join(neobot_path, 'config', 'nav2_params.yaml'),
             'package_path': neobot_path, 
         }.items()
@@ -37,13 +37,13 @@ def generate_launch_description():
         arguments=[['-d', rviz_config_file]]
     )
 
-    map_server_node = Node(
-        package='nav2_map_server',
-        executable='map_server',
-        name='map_server',
-        output='screen',
-        parameters=[{'yaml_filename': join(neobot_path, 'maps', 'neobot_map.yaml')}],
-    )
+    # map_server_node = Node(
+    #     package='nav2_map_server',
+    #     executable='map_server',
+    #     name='map_server',
+    #     output='screen',
+    #     parameters=[{'yaml_filename': join(neobot_path, 'maps', 'neobot_map.yaml')}],
+    # )
 
     static_transform_publisher_node = Node(
         package='tf2_ros',
@@ -58,7 +58,7 @@ def generate_launch_description():
 
     ld.add_action(nav2_launch_cmd)
     ld.add_action(rviz_launch_cmd)
-    ld.add_action(map_server_node)
+    # ld.add_action(map_server_node)
     ld.add_action(static_transform_publisher_node)
 
 

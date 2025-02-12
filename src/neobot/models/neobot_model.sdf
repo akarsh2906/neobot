@@ -549,13 +549,13 @@
                     </axis>
         </joint>
         
-        <joint name='front_castor_joint' type='ball'>
+        <joint name='front_castor_joint' type='fixed'>
             <pose relative_to='base_link'>0.12 0 -0.0265 0 0 0</pose>
                 <parent>base_link</parent>
                 <child>front_castor_link</child>
         </joint>
         
-        <joint name='rear_castor_joint' type='ball'>
+        <joint name='rear_castor_joint' type='fixed'>
             <pose relative_to='base_link'>-0.12 0 -0.0265 0 0 0</pose>
                 <parent>base_link</parent>
                 <child>rear_castor_link</child>
